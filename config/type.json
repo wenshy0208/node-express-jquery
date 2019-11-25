@@ -1,0 +1,14 @@
+{
+"termCtyCd": "终端国家码",
+"prpt_Crdt_No": "业主证件号码",
+"idv_Nm": "个人姓名",
+"gnd": "性别",
+"nat": "国籍",
+"brth_Dt": "出生日期",
+"brth_Lnd": "出生地",
+"sgIs_Dt": "签发日期",
+"prim_Adr": "主地址",
+"avlDt_EdDt": "有效期结束日期",
+"crdt_SgIs_Ahr_Nm": "证件签发机关名称",
+"sgn": "签名"
+}

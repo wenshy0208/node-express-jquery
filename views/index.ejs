@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+  <head>
+    <title>图片对比识别</title>
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="./stylesheets/bootstrap.min.css"
+    />
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="./stylesheets/bootstrap-theme.min.css"
+    />
+    <link type="text/css" rel="stylesheet" href="./stylesheets/style.css" />
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="info">图片对比识别平台</div>
+      <form
+        class="form-horizontal"
+        enctype="multipart/form-data"
+        method="post"
+        action="javascript:;"
+        role="form"
+        id="frmUploadFile"
+      >
+      <!-- 单图片 -->
+        <div class="g-m-20">
+          <p class="g-ta-l">原图片：</p>
+          <input type="file" name="files" class="form-control" id="fileupload1"/>
+          <button class="btn btn-default" onClick="uploadImage(0)">
+            确认上传
+          </button>
+        </div>
+      <!-- 多图片 -->
+        <div class="g-m-20">
+          <p class="g-ta-l">对比图片：</p>
+          <input type="file" name="filesmore" class="form-control" id="fileupload2"  multiple="multiple"/>
+          <button class="btn btn-default" onClick="uploadImage(1)">
+            确认上传
+          </button>
+          <ul class="list-group" id="uploadarea"></ul>
+        </div>
+        <div class="g-m-20">
+          <button class="btn btn-primary submmit" onClick="submmit()">
+            开始识别
+          </button>
+        </div>       
+      </form>
+      <div class="list-wrapper">
+        <p class="bold">图片识别结果</p>
+        <ul class="title">
+          <li class="left">信息要素</li>
+          <li class="right">识别结果</li>
+        </ul>
+        <ul class="content">
+          <li class="no-data">暂无结果</li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="./javascripts/jquery.min.js"></script>
+
+<script>
+
+  //获取配置文件
+      var types;
+      var filePath1;
+      var filePath2;
+      // $.ajax({
+      //   url: '/config',
+      //   type: 'get', //请求方式为get
+      //   dataType: 'json', //返回数据格式为json
+      //   success: function(data) {
+      //     //请求成功完成后要执行的方法
+      //     // config=$.parseJSON(data);
+      //     types = data.types;
+      //     //渲染类型选择
+      //     var _html = '';
+      //     for (var i = 0; i < types.length; i++) {
+      //       _html +=
+      //         '<div class="item"><input name="filetype" type="radio" id=' +
+      //         i +
+      //         ' value=' +
+      //         types[i] +
+      //         ' data-type='+types[i]+
+      //         '><label for=' +
+      //         i +
+      //         '>' +
+      //         types[i] +
+      //         '</label></div>'
+      //     }
+      //     $('.btn-group').html(_html);
+      //   },
+      //   error: function() {
+      //     alert('文件读取失败')
+      //   }
+      // })
+
+/******************文件上传*************************************/
+      function uploadImage(index) {
+        var oneOrMore = index;
+        var headPhotoFile;
+        if(oneOrMore=='0'){
+          headPhotoFile=$("#fileupload1");
+        }else{
+          headPhotoFile=$("#fileupload2");
+        }
+        
+        if (headPhotoFile[0].files.length == 0) {
+          alert('请上传影像');
+          return
+        }
+
+        if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(headPhotoFile.val())){
+            alert("图片类型必须是gif,jpeg,jpg,png中的一种");
+            return;
+        }
+
+        var url="";
+        if(index=='0'){//说明是原文件上传
+          var file = $("#fileupload1");
+          var formData = new FormData();
+          formData.append('file',file[0].files[0]);
+          url = "/upload1";
+          console.log(formData);
+          // var formData = new FormData($('#fileupload1')[0])
+        }else{//说明是对比图上传
+          var file = $("#fileupload2");
+          var formData = new FormData();
+          for(var i=0;i<file[0].files.length;i++){//这里如果单张上传就不必遍历直接formData.append('file',file.files[0])
+                  formData.append('file',file[0].files[i]);
+          }
+          console.log(formData);
+          url = "/upload2";
+        }
+        
+        $.ajax({
+          url: url,
+          type: 'post',
+          data: formData,
+          async: false,
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function(data) {
+            if (200 === data.code) {
+              if (data.filePath) {
+                if(oneOrMore=='0'){
+                  filePath1 = data.filePath;
+                }else{
+                  filePath2 = data.filePath;
+                }
+                alert("上传成功");
+                $('.submmit').attr('disabled', false)
+              }
+            } else {
+              alert('上传失败')
+            }
+          },
+          error: function(err) {
+            console.log('err', err)
+            alert('影像上传服务通信发生错误')
+          }
+        })
+      }
+
+
+      function submmit() {
+
+        if ($('#fileupload1')[0].files.length == 0 || $('#fileupload2')[0].files.length == 0) {
+          alert('请先上传影像')
+          return
+        }
+
+        //获取当前影像类型
+        var index = $('input:radio[name="filetype"]:checked').attr('id');
+        var id = Math.random(1,100);
+        $.ajax({
+          url: '/submmit',
+          type: 'post',
+          data: {img: filePath1,multImgData:filePath2,uuid:id },
+          async: false,
+          success: function(data) {
+            if (200 === data.code) {
+              alert('识别成功')
+              //数据处理
+              console.log(data);       
+              var list = data.data.similarList;
+              var _html = "";
+              for(var i in list){
+                  var pos = list[i];
+                  var url ="http://128.96.98.15:3001/" + pos.cutImgPath + pos.picName;
+                  _html += '<li><div class="left"><img src="'+url+'" alt="图片"></div>'+
+                    '<div class="right">'+
+                      pos.similarValue+
+                      '</div></li>'            
+              }
+              $('.content').html(_html);
+              $('.submmit').attr('disabled', true)
+            }
+          },
+          error: function(err) {}
+        })
+      }
+
+    $('input').on('change', function(event) {
+        var files = event.target.files,
+          reader = new FileReader()
+        if (files && files[0]) {
+          reader.onload = function(ev) {
+            // $('img').attr('src', ev.target.result);
+          }
+          reader.readAsDataURL(files[0])
+        }
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,130 @@
+
+var data0={
+      "data":[{
+            "idCard_No_Rgst_No":"2204948877",
+            "idv_Nm":"zhangsan"
+      }],
+      "imgageName":"huoche.jpg",
+      "type":1
+  }
+
+  var data1={
+      "data":[{
+            "idCard_No_Rgst_No":"2204948877",
+            "idv_Nm":"增值税发票",
+            "inv_CntDsc_GRP":[{
+                "gds_Dsc_Inf":"吃饭"
+                "unitPrc":"12345"
+            }]
+      }],
+      "imgageName":"huoche.jpg",
+      "type":1
+  }
+
+  var data2 = {
+    data: {
+      image_count: 1,
+      image_list: [
+        {
+          image_dpi: '200',
+          slice_count: 13,
+          slice_list: [
+            {
+              parent_id: '0',
+              path: '',
+              piece_level: '',
+              pos: 'idv_Nm',
+              rec_confi_level: '0.9',
+              rec_result: '熊博颖XIONGOYING',
+              rect: ['1144,564,1056,310']
+            },
+            {
+              parent_id: '1',
+              path: '',
+              piece_level: '',
+              pos: 'nat',
+              rec_confi_level: '0.9',
+              rec_result: '中国/CHINESE',
+              rect: ['1597,974,788,176']
+            },
+            {
+              parent_id: '2',
+              path: '',
+              piece_level: '',
+              pos: 'brth_Dt',
+              rec_confi_level: '0.9',
+              rec_result: '14AUG1986',
+              rect: ['2391,960,845,180']
+            }
+          ],
+          voucher: '0002'
+        }
+      ],
+      voucher_confi_level: '0.99'
+    },
+    error_code: 'YCEA0421000',
+    message: 'success',
+    status: 200
+  }
+
+var data3 = {
+    data: {
+      image_count: 1,
+      image_list: [
+        {
+          image_dpi: '200',
+          slice_count: 13,
+          slice_list: [
+            {
+              parent_id: '1',
+              path: '',
+              piece_level: '',
+              pos: 'idvNm',
+              rec_confi_level: '0.9',
+              rec_result: '中国/CHINESE',
+              rect: ['1597,974,788,176']
+            },
+            {
+              parent_id: '2',
+              path: '',
+              piece_level: '',
+              pos: 'apntDrvPsnIniLcsgDt',
+              rec_confi_level: '0.9',
+              rec_result: '14AUG1986',
+              rect: ['2391,960,845,180']
+            },
+          ],
+          voucher: '0002'
+        },
+        {
+          image_dpi: '200',
+          slice_count: 13,
+          slice_list: [
+            {
+              parent_id: '1',
+              path: '',
+              piece_level: '',
+              pos: 'nat',
+              rec_confi_level: '0.9',
+              rec_result: '美国',
+              rect: ['1597,974,788,176']
+            },
+            {
+              parent_id: '2',
+              path: '',
+              piece_level: '',
+              pos: 'apntDrvPsnIniLcsgDt',
+              rec_confi_level: '0.9',
+              rec_result: '3.28',
+              rect: ['2391,960,845,180']
+            },
+          ],
+          voucher: '0002'
+        }
+      ],
+      voucher_confi_level: '0.99'
+    },
+    error_code: 'YCEA0421000',
+    message: 'success',
+    status: 200
+  }
